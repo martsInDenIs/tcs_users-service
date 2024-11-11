@@ -1,10 +1,14 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UserEntity } from './users/users.entity';
+import { UserEntity } from './database/users.entity';
+import { UsersModule } from './users/users.module';
+import { HashModule } from './hash/hash.module';
 
 @Module({
   imports: [
+    HashModule,
+    UsersModule,
     ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
