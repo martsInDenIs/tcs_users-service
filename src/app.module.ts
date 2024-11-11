@@ -1,9 +1,7 @@
 import { Module } from '@nestjs/common';
-import { UsersController } from './users.controller';
-import { UsersService } from './users.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UserEntity } from './users.entity';
+import { UserEntity } from './users/users.entity';
 
 @Module({
   imports: [
@@ -21,7 +19,5 @@ import { UserEntity } from './users.entity';
       inject: [ConfigService],
     }),
   ],
-  controllers: [UsersController],
-  providers: [UsersService],
 })
-export class UsersModule {}
+export class AppModule {}
