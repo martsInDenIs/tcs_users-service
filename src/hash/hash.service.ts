@@ -1,11 +1,12 @@
-import { ConfigService } from '@nestjs/config';
+import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
-export class HashService {
+@Injectable()
+export class HashService implements OnApplicationBootstrap {
   private salt: string;
 
-  constructor(private readonly configService: ConfigService) {
-    this.salt = configService.getOrThrow<string>('BCRYPT_SALT');
+  async onApplicationBootstrap() {
+    this.salt = await bcrypt.genSalt();
   }
 
   hash(data: string | Buffer) {

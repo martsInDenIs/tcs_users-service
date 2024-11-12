@@ -9,9 +9,8 @@ import { HashModule } from './hash/hash.module';
   imports: [
     HashModule,
     UsersModule,
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         database: configService.getOrThrow('DB_NAME'),

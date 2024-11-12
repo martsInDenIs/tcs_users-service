@@ -10,7 +10,11 @@ export class UsersService {
     private readonly usersRepository: Repository<UserEntity>,
   ) {}
 
-  register(data: Omit<UserEntity, 'id'>) {
+  hasUser(email: string) {
+    return this.usersRepository.exists({ where: { email } });
+  }
+
+  register(data: Omit<UserEntity, 'id'>): Promise<UserEntity> {
     return this.usersRepository.save(data);
   }
 }

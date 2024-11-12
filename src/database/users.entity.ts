@@ -6,9 +6,9 @@ export enum RoleEnum {
   DEVELOPER = 'developer',
 }
 
-@Entity()
+@Entity({ name: 'User' })
 export class UserEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ unique: true })
