@@ -10,7 +10,7 @@ import { AccessTokenService } from '../services/access-token.service';
 import { SignUpResponse } from '../users.types';
 
 @Injectable()
-export class SignUpInterceptor implements NestInterceptor {
+export class EncodeAccessTokenInterceptor implements NestInterceptor {
   constructor(private readonly accessToken: AccessTokenService) {}
 
   intercept(

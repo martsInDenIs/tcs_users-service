@@ -1,6 +1,6 @@
 import {
+  BadRequestException,
   Controller,
-  Get,
   UseGuards,
   UseInterceptors,
   ValidationPipe,
@@ -8,16 +8,21 @@ import {
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { UsersService } from './users.service';
 import { SignUpPayloadDTO } from './dto/sign-up.dto';
-import { SignUpInterceptor } from './interceptors/sign-up.interceptor';
+import { EncodeAccessTokenInterceptor } from './interceptors/encode-access-token.interceptor';
 import { UserAlreadyExistsGuard } from './guards/user-already-exists.guard';
 import { SignUpTransforPipe } from './pipes/sign-up.pipe';
+import { SignInPayloadDTO } from './dto/sign-in.dto';
+import { HashService } from 'src/hash/hash.service';
 
 @Controller()
 export class UsersController {
-  constructor(private readonly service: UsersService) {}
+  constructor(
+    private readonly service: UsersService,
+    private readonly hashService: HashService,
+  ) {}
 
   @UseGuards(UserAlreadyExistsGuard)
-  @UseInterceptors(SignUpInterceptor)
+  @UseInterceptors(EncodeAccessTokenInterceptor)
   @MessagePattern('sign-up')
   async register(
     @Payload(new ValidationPipe(), SignUpTransforPipe) data: SignUpPayloadDTO,
@@ -25,7 +30,22 @@ export class UsersController {
     return this.service.create(data);
   }
 
-  @Get()
-  // @MessagePattern('sign-in')
-  login() {}
+  @UseInterceptors(EncodeAccessTokenInterceptor)
+  @MessagePattern('sign-in')
+  async login(@Payload(new ValidationPipe()) credentials: SignInPayloadDTO) {
+    const user = await this.service.findOne({ email: credentials.email });
+
+    const doesPasswordMatch = await this.hashService.compare(
+      credentials.password,
+      user.password,
+    );
+
+    if (!doesPasswordMatch) {
+      throw new BadRequestException(
+        'User with given password and email doesn`t exists! Please, check it again.',
+      );
+    }
+
+    return user;
+  }
 }

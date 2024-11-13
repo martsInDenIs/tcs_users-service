@@ -6,7 +6,7 @@ import { UsersService } from './users.service';
 import { HashModule } from 'src/hash/hash.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { SignUpInterceptor } from './interceptors/sign-up.interceptor';
+import { EncodeAccessTokenInterceptor } from './interceptors/encode-access-token.interceptor';
 import { AccessTokenService } from './services/access-token.service';
 import { UserAlreadyExistsGuard } from './guards/user-already-exists.guard';
 
@@ -28,7 +28,7 @@ import { UserAlreadyExistsGuard } from './guards/user-already-exists.guard';
   controllers: [UsersController],
   providers: [
     UsersService,
-    SignUpInterceptor,
+    EncodeAccessTokenInterceptor,
     UserAlreadyExistsGuard,
     AccessTokenService,
   ],

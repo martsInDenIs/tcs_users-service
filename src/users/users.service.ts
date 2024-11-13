@@ -14,7 +14,11 @@ export class UsersService {
     return this.usersRepository.exists({ where: { email } });
   }
 
-  register(data: Omit<UserEntity, 'id'>): Promise<UserEntity> {
+  create(data: Omit<UserEntity, 'id'>): Promise<UserEntity> {
     return this.usersRepository.save(data);
+  }
+
+  findOne(conditions: Partial<UserEntity>) {
+    return this.usersRepository.findOne({ where: conditions });
   }
 }
