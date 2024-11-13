@@ -22,7 +22,7 @@ export class UsersController {
   async register(
     @Payload(new ValidationPipe(), SignUpTransforPipe) data: SignUpPayloadDTO,
   ) {
-    return this.service.register(data);
+    return this.service.create(data);
   }
 
   @Get()
