@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Controller,
+  Post,
   UseGuards,
   UseInterceptors,
   ValidationPipe,
@@ -31,7 +32,7 @@ export class UsersController {
   }
 
   @UseInterceptors(EncodeAccessTokenInterceptor)
-  @MessagePattern('sign-in')
+  @Post('sign-in')
   async login(@Payload(new ValidationPipe()) credentials: SignInPayloadDTO) {
     const user = await this.service.findOne({ email: credentials.email });
 
